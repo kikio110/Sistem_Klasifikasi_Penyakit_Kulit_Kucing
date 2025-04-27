@@ -1,3 +1,4 @@
+import 'package:catcare_mobile/pages/about_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
@@ -180,7 +181,22 @@ class HomePage extends StatelessWidget {
   Widget _featureButton(BuildContext context, dynamic icon, String label) {
     return GestureDetector(
       onTap: () {
-        // Navigasi ke halaman terkait nanti di sini
+        if (label == 'Histori') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AboutPage()),
+          );
+        } else if (label == 'Periksa') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AboutPage()),
+          );
+        } else if (label == 'Tentang') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AboutPage()),
+          );
+        }
       },
       child: Container(
         width: 95,
