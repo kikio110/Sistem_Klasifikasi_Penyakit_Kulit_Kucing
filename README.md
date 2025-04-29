@@ -1,1 +1,1 @@
-# Sistem_Klasifikasi_Penyakit_Kulit_Kucing
+# Aplikasi_Klasifikasi_Penyakit_Kulit_Kucing
