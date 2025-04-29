@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "welcome": "Welcome",
+  "hello": "Hello",
+  "checkNow": "Check it Now",
+  "desc": "Worried about your beloved cat's skin health?, let's check it now.",
+  "check" : "Check Now",
+  "feature": "Feature",
+  "history" : "History",
+  "check" : "Check",
+  "about" : "About",
+  "tips" : "Cat care tips for you :)"
+}

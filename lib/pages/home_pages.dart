@@ -1,8 +1,16 @@
 import 'package:catcare_mobile/pages/about_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  final VoidCallback onToggleLanguage;
+  final Locale currentLocale;
+
+  const HomePage({
+    Key? key,
+    required this.onToggleLanguage,
+    required this.currentLocale,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,26 +26,39 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Welcome to Catcare',
+                  Text(
+                    AppLocalizations.of(context)!.welcome,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: onToggleLanguage,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFF2929),
+                      backgroundColor: const Color.fromARGB(255, 41, 84, 255),
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 10),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
                     ),
-                    child: const Text(
-                      'Keluar',
-                      style: TextStyle(fontSize: 12, color: Colors.white),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          'assets/icons/world.png',
+                          width: 12,
+                          height: 12,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          currentLocale.languageCode.toUpperCase(),
+                          style: const TextStyle(
+                              fontSize: 10, color: Colors.white),
+                        )
+                      ],
                     ),
                   ),
                 ],
@@ -73,8 +94,8 @@ class HomePage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Text(
-                                'Periksa Sekarang',
+                              Text(
+                                AppLocalizations.of(context)!.checkNow,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 21,
@@ -82,8 +103,8 @@ class HomePage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
-                                'Khawatir dengan kesehatan kulit kucing kesayanganmu, mari periksa sekarang',
+                              Text(
+                                AppLocalizations.of(context)!.desc,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 10,
@@ -103,8 +124,8 @@ class HomePage extends StatelessWidget {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 0),
                                   ),
-                                  child: const Text(
-                                    'Periksa',
+                                  child: Text(
+                                    AppLocalizations.of(context)!.check,
                                     style: TextStyle(color: Colors.white),
                                   ),
                                 ),
@@ -130,7 +151,7 @@ class HomePage extends StatelessWidget {
 
               // Fitur
               Text(
-                'Fitur',
+                AppLocalizations.of(context)!.feature,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -140,9 +161,9 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _featureButton(context, 'assets/icons/paste.png', 'Histori'),
-                  _featureButton(context, 'assets/icons/qr.png', 'Periksa'),
-                  _featureButton(context, 'assets/icons/info.png', 'Tentang'),
+                  _featureButton(context, 'assets/icons/paste.png', AppLocalizations.of(context)!.history),
+                  _featureButton(context, 'assets/icons/qr.png', AppLocalizations.of(context)!.check),
+                  _featureButton(context, 'assets/icons/info.png', AppLocalizations.of(context)!.about),
                 ],
               ),
 
@@ -150,7 +171,7 @@ class HomePage extends StatelessWidget {
 
               // Tips Section
               Text(
-                'Tips merawat kucing untuk kamu :)',
+                AppLocalizations.of(context)!.tips,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

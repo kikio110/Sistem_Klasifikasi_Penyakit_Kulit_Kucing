@@ -1,20 +1,46 @@
 import 'package:flutter/material.dart';
-import 'pages/home_pages.dart'; // Sesuaikan dengan lokasi home kamu
+import 'pages/home_pages.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale _locale = const Locale('id');
+
+  void _toggleLanguage() {
+    setState(() {
+      _locale = _locale.languageCode == 'id' ? const Locale('en') : const Locale('id');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      locale: _locale,
+      supportedLocales: const [
+        Locale('en'),
+        Locale('id'),
+      ],
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
       title: 'Catcare',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        fontFamily: 'sans-serif', // Font yang kamu daftarkan
+        fontFamily: 'sans-serif',
         scaffoldBackgroundColor: Colors.white,
         textTheme: const TextTheme(
           headlineSmall: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -36,7 +62,10 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      home: const HomePage(), // Ini halaman utama kamu
+      home: HomePage(
+        onToggleLanguage: _toggleLanguage,
+        currentLocale: _locale,
+      ),
     );
   }
 }
