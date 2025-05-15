@@ -1,6 +1,8 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({Key? key}) : super(key: key);
@@ -153,16 +155,101 @@ class _CheckPageState extends State<CheckPage> {
 }
 
 // Halaman setelah ambil gambar
-class ImagePreviewScreen extends StatelessWidget {
+class ImagePreviewScreen extends StatefulWidget {
   final String imagePath;
 
   const ImagePreviewScreen({super.key, required this.imagePath});
 
   @override
+  State<ImagePreviewScreen> createState() => _ImagePreviewScreenState();
+}
+
+class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
+  String? _predictionLabel;
+  String? _description;
+  double? _confidence;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _sendImageToServer();
+  }
+
+  Future<void> _sendImageToServer() async {
+    try {
+      var uri = Uri.parse('https://08b7-103-149-71-10.ngrok-free.app/predict'); // ganti <IP_ADDRESS> dengan IP lokal
+      var request = http.MultipartRequest('POST', uri);
+      request.files.add(await http.MultipartFile.fromPath('file', widget.imagePath));
+
+      var response = await request.send();
+      var responseData = await http.Response.fromStream(response);
+
+      if (response.statusCode == 200) {
+        var result = json.decode(responseData.body);
+
+        setState(() {
+          _predictionLabel = result['class'];
+          _confidence = result['confidence'];
+          _description = result['description'];
+          _isLoading = false;
+        });
+      } else {
+        setState(() {
+          _predictionLabel = "Gagal mendapatkan prediksi: ${responseData.body}";
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _predictionLabel = "Terjadi kesalahan: $e";
+        _isLoading = false;
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Hasil Foto")),
-      body: Center(child: Image.file(File(imagePath))),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(height: 16),
+          Center(child: Image.file(File(widget.imagePath), height: 300)),
+          const SizedBox(height: 24),
+          _isLoading
+              ? const CircularProgressIndicator()
+              : _predictionLabel != null
+                  ? Column(
+                      children: [
+                        Text(
+                          "Prediksi: $_predictionLabel",
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        if (_confidence != null)
+                          Text(
+                            "Tingkat Keyakinan: ${(_confidence! * 100).toStringAsFixed(2)}%",
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        const SizedBox(height: 12),
+                        if (_description != null)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Text(
+                              _description!,
+                              textAlign: TextAlign.justify,
+                              style: const TextStyle(fontSize: 14),
+                            ),
+                          ),
+                      ],
+                    )
+                  : const Text("Prediksi tidak ditemukan."),
+        ],
+      ),
     );
   }
 }
