@@ -178,7 +178,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
 
   Future<void> _sendImageToServer() async {
     try {
-      var uri = Uri.parse('https://08b7-103-149-71-10.ngrok-free.app/predict'); // ganti <IP_ADDRESS> dengan IP lokal
+      var uri = Uri.parse('https://possible-grouse-square.ngrok-free.app/predict'); // ganti <IP_ADDRESS> dengan IP lokal
       var request = http.MultipartRequest('POST', uri);
       request.files.add(await http.MultipartFile.fromPath('file', widget.imagePath));
 
