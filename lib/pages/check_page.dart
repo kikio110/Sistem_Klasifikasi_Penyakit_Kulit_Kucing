@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _CheckPageState extends State<CheckPage> {
   Future<void> _initCamera() async {
     _cameras = await availableCameras();
     _cameraController = CameraController(
-      _cameras[0], // kamera belakang
+      _cameras[0],
       ResolutionPreset.medium,
       enableAudio: false,
     );
@@ -38,13 +39,24 @@ class _CheckPageState extends State<CheckPage> {
     if (!_cameraController!.value.isInitialized) return;
 
     final image = await _cameraController!.takePicture();
-    // Simulasikan ke halaman hasil deteksi
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (_) => ImagePreviewScreen(imagePath: image.path),
       ),
     );
+  }
+
+  Future<void> _pickImageFromGallery() async {
+    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => ImagePreviewScreen(imagePath: pickedFile.path),
+        ),
+      );
+    }
   }
 
   void _toggleFlash() async {
@@ -121,9 +133,7 @@ class _CheckPageState extends State<CheckPage> {
                     children: [
                       IconButton(
                         icon: const Icon(Icons.image, color: Colors.white),
-                        onPressed: () {
-                          // implementasi galeri nanti
-                        },
+                        onPressed: _pickImageFromGallery,
                       ),
                       GestureDetector(
                         onTap: _takePicture,
@@ -154,7 +164,9 @@ class _CheckPageState extends State<CheckPage> {
   }
 }
 
-// Halaman setelah ambil gambar
+// =========================
+// PREVIEW & PREDIKSI GAMBAR
+// =========================
 class ImagePreviewScreen extends StatefulWidget {
   final String imagePath;
 
@@ -178,7 +190,7 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
 
   Future<void> _sendImageToServer() async {
     try {
-      var uri = Uri.parse('https://possible-grouse-square.ngrok-free.app/predict'); // ganti <IP_ADDRESS> dengan IP lokal
+      var uri = Uri.parse('https://possible-grouse-square.ngrok-free.app/predict');
       var request = http.MultipartRequest('POST', uri);
       request.files.add(await http.MultipartFile.fromPath('file', widget.imagePath));
 
@@ -212,43 +224,45 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text("Hasil Foto")),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(height: 16),
-          Center(child: Image.file(File(widget.imagePath), height: 300)),
-          const SizedBox(height: 24),
-          _isLoading
-              ? const CircularProgressIndicator()
-              : _predictionLabel != null
-                  ? Column(
-                      children: [
-                        Text(
-                          "Prediksi: $_predictionLabel",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        if (_confidence != null)
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(height: 16),
+            Center(child: Image.file(File(widget.imagePath), height: 300)),
+            const SizedBox(height: 24),
+            _isLoading
+                ? const CircularProgressIndicator()
+                : _predictionLabel != null
+                    ? Column(
+                        children: [
                           Text(
-                            "Tingkat Keyakinan: ${(_confidence! * 100).toStringAsFixed(2)}%",
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        const SizedBox(height: 12),
-                        if (_description != null)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(
-                              _description!,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(fontSize: 14),
+                            "Prediksi: $_predictionLabel",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                      ],
-                    )
-                  : const Text("Prediksi tidak ditemukan."),
-        ],
+                          if (_confidence != null)
+                            Text(
+                              "Tingkat Keyakinan: ${(_confidence! * 100).toStringAsFixed(2)}%",
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          const SizedBox(height: 12),
+                          if (_description != null)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                _description!,
+                                textAlign: TextAlign.justify,
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                        ],
+                      )
+                    : const Text("Prediksi tidak ditemukan."),
+          ],
+        ),
       ),
     );
   }
