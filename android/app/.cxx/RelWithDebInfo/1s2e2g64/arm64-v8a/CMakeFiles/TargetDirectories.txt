@@ -1,0 +1,2 @@
+D:/Semester 6/PM2/Sistem_Klasifikasi_Penyakit_Kulit_Kucing/android/app/.cxx/RelWithDebInfo/1s2e2g64/arm64-v8a/CMakeFiles/edit_cache.dir
+D:/Semester 6/PM2/Sistem_Klasifikasi_Penyakit_Kulit_Kucing/android/app/.cxx/RelWithDebInfo/1s2e2g64/arm64-v8a/CMakeFiles/rebuild_cache.dir

@@ -1,4 +1,6 @@
 import 'package:catcare_mobile/pages/about_page.dart';
+import 'package:catcare_mobile/pages/check_page.dart';
+import 'package:catcare_mobile/pages/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -205,12 +207,12 @@ class HomePage extends StatelessWidget {
         if (label == 'Histori') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AboutPage()),
+            MaterialPageRoute(builder: (context) => const HistoryPage()),
           );
         } else if (label == 'Periksa') {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AboutPage()),
+            MaterialPageRoute(builder: (context) => const CheckPage()),
           );
         } else if (label == 'Tentang') {
           Navigator.push(
