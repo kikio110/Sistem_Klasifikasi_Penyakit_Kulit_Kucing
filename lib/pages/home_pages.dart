@@ -212,7 +212,7 @@ class HomePage extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => const AboutPage()),
           );
-        } else if (label == 'Tentang') {
+        } else if (label == AppLocalizations.of(context)!.about) {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AboutPage()),
