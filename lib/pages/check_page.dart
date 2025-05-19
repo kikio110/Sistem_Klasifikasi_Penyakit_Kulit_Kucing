@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
+import '../db/db_detection.dart';
 
 class CheckPage extends StatefulWidget {
   const CheckPage({Key? key}) : super(key: key);
@@ -205,6 +206,13 @@ class _ImagePreviewScreenState extends State<ImagePreviewScreen> {
           _confidence = result['confidence'];
           _description = result['description'];
           _isLoading = false;
+        });
+
+        await DetectionDatabaseHelper.instance.insertDetection({
+          'imagePath': widget.imagePath,
+          'label': result['class'],
+          'confidence': result['confidence'],
+          'description': result['description'],
         });
       } else {
         setState(() {
