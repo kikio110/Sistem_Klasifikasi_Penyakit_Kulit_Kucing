@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'pages/splash_screen.dart';
 import 'pages/home_pages.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -62,9 +63,7 @@ class _MyAppState extends State<MyApp> {
           ),
         ),
       ),
-      home: HomePage(
-        onToggleLanguage: _toggleLanguage,
-        currentLocale: _locale,
+      home: SplashScreen(
       ),
     );
   }

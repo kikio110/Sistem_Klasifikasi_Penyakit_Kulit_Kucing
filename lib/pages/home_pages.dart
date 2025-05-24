@@ -163,9 +163,12 @@ class HomePage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _featureButton(context, 'assets/icons/paste.png', AppLocalizations.of(context)!.history),
-                  _featureButton(context, 'assets/icons/qr.png', AppLocalizations.of(context)!.check),
-                  _featureButton(context, 'assets/icons/info.png', AppLocalizations.of(context)!.about),
+                  _featureButton(context, 'assets/icons/paste.png',
+                      AppLocalizations.of(context)!.history),
+                  _featureButton(context, 'assets/icons/qr.png',
+                      AppLocalizations.of(context)!.check),
+                  _featureButton(context, 'assets/icons/info.png',
+                      AppLocalizations.of(context)!.about),
                 ],
               ),
 
